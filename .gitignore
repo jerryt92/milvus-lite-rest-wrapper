@@ -176,6 +176,6 @@ __pycache__/
 /platsvc-snmp-starter/src/test/java/com/nms/platsvc/snmp/generator/
 /logs/
 /venv/
-/db/
+/milvus_data/
 /openapi/generated/
 /MilvusLite.spec
