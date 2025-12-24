@@ -1,3 +1,5 @@
+[简体中文](README.md) | English
+
 # Milvus Lite REST Wrapper Project Description
 
 ## Project Overview

@@ -43,3 +43,22 @@ async def show_collections():
     """
     print(f"GET /collections")
     return client.list_collections()
+
+@app.get("/test/collections/create")
+async def create_collection():
+    """
+    创建集合
+    """
+    print(f"GET /test/collections/create")
+    return client.create_collection(
+        collection_name="test_collection",
+        dimension=128,
+        description="Created via REST API"
+    )
+@app.get("/test/collections/drop")
+async def drop_collection():
+    """
+    删除集合
+    """
+    print(f"GET /test/collections/drop")
+    return client.drop_collection(collection_name="test_collection")
