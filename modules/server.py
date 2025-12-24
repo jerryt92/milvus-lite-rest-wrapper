@@ -11,30 +11,12 @@ from modules.milvus_lite_client import client
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Startup event
     print(f"✅ Milvus Lite API started")
+    # 在应用启动时导入 API 模块，避免循环导入
+    import api  # noqa: F401 - 导入用于注册路由
     yield
 
 
 app = FastAPI(title="Milvus REST API Wrapper", lifespan=lifespan)
-
-
-# --- Pydantic 模型 (用于请求体验证) ---
-class CreateCollectionRequest(BaseModel):
-    collection_name: str
-    dimension: int
-    description: Optional[str] = "Created via REST API"
-
-
-class InsertDataRequest(BaseModel):
-    collection_name: str
-    vectors: List[List[float]]  # 二维数组: [ [0.1, 0.2...], [0.3, 0.4...] ]
-
-
-class SearchRequest(BaseModel):
-    collection_name: str
-    query_vectors: List[List[float]]
-    top_k: int = 5
-    nprobe: int = 10
-
 
 @app.get("/collections")
 async def show_collections():
@@ -43,22 +25,3 @@ async def show_collections():
     """
     print(f"GET /collections")
     return client.list_collections()
-
-@app.get("/test/collections/create")
-async def create_collection():
-    """
-    创建集合
-    """
-    print(f"GET /test/collections/create")
-    return client.create_collection(
-        collection_name="test_collection",
-        dimension=128,
-        description="Created via REST API"
-    )
-@app.get("/test/collections/drop")
-async def drop_collection():
-    """
-    删除集合
-    """
-    print(f"GET /test/collections/drop")
-    return client.drop_collection(collection_name="test_collection")

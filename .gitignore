@@ -177,3 +177,4 @@ __pycache__/
 /logs/
 /venv/
 /db/
+/openapi/generated/

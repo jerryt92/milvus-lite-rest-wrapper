@@ -1,0 +1,50 @@
+openapi: 3.1.0
+info:
+  title: Title
+  description: Title
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:29530'
+tags:
+  - name: health
+  - name: test
+  - name: collections
+paths:
+  /v1/rest/check-health:
+    get:
+      tags:
+        - health
+      operationId: check_health
+      responses:
+        '200':
+          description: OK
+  /v1/rest/test/collections/create:
+    get:
+      tags:
+        - test
+      operationId: create_collection
+      responses:
+        '200':
+          description: OK
+  /v1/rest/test/collections/drop:
+    get:
+      tags:
+        - test
+      operationId: drop_collection
+      responses:
+        '200':
+          description: OK
+  /v1/rest/milvuls/collections:
+    get:
+      tags:
+        - collections
+      operationId: list_collections
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
