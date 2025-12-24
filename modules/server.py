@@ -1,10 +1,7 @@
 from contextlib import asynccontextmanager
-from typing import List, Optional, AsyncGenerator
+from typing import AsyncGenerator
 
 from fastapi import FastAPI
-from pydantic import BaseModel
-
-from modules.milvus_lite_client import client
 
 
 @asynccontextmanager
@@ -17,11 +14,3 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 
 app = FastAPI(title="Milvus REST API Wrapper", lifespan=lifespan)
-
-@app.get("/collections")
-async def show_collections():
-    """
-    获取所有集合
-    """
-    print(f"GET /collections")
-    return client.list_collections()
