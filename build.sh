@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =================配置区域=================
-APP_NAME="MilvusLite"
+APP_NAME="milvus-lite"
 ENTRY_POINT="main.py"
 # =========================================
 
