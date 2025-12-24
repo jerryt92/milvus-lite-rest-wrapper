@@ -25,3 +25,7 @@ The project depends on the milvus-lite project, which is a lightweight version o
 - Suitable for single-machine application scenarios
 
 This project provides an excellent solution for developers who need vector database functionality while pursuing lightweight and local deployment options.
+
+## Acknowledgements
+
+The project depends on the [milvus-lite](https://github.com/milvus-io/milvus-lite) project, thanks to the contributions of the Milvus team.

@@ -27,3 +27,7 @@
 - 适合单机应用场景
 
 这个项目为需要向量数据库功能但追求轻量化和本地化部署的开发者提供了一个很好的解决方案。
+
+## 感谢
+
+项目依赖 [milvus-lite](https://github.com/milvus-io/milvus-lite) 项目，感谢 Milvus 团队的贡献。
