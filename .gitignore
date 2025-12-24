@@ -178,3 +178,4 @@ __pycache__/
 /venv/
 /db/
 /openapi/generated/
+/MilvusLite.spec

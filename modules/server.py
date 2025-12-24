@@ -8,9 +8,16 @@ from fastapi import FastAPI
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Startup event
     print(f"✅ Milvus Lite API started")
-    # 在应用启动时导入 API 模块，避免循环导入
-    import api  # noqa: F401 - 导入用于注册路由
     yield
 
 
 app = FastAPI(title="Milvus REST API Wrapper", lifespan=lifespan)
+# 注册路由
+
+from api.milvus_api import router as milvus_router
+from api.health_api import router as health_router
+from api.test_api import router as test_router
+
+app.include_router(milvus_router)
+app.include_router(health_router)
+app.include_router(test_router)
