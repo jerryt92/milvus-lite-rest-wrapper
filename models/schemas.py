@@ -36,3 +36,7 @@ class SearchRequest(BaseModel):
     top_k: int
     output_fields: List[str]
     search_params: Dict[str, Any] = {} # 比如 metric_type
+
+class DeleteRequest(BaseModel):
+    collection_name: str
+    ids: List[str]

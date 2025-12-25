@@ -112,3 +112,31 @@ async def search(req: SearchRequest):
             item['score'] = hit['distance']
             results.append(item)
     return results
+
+
+from models.schemas import DeleteRequest
+
+
+@router.post("/vectors/delete")
+async def delete_vectors(req: DeleteRequest):
+    """
+    删除向量接口
+    """
+    try:
+        # 根据ID列表构建删除表达式
+        if req.ids:
+            # 构建类似 "id in [1, 2, 3]" 的过滤条件
+            id_list_str = ", ".join(map(str, req.ids))
+            filter_expr = f"id in [{id_list_str}]"
+        else:
+            raise HTTPException(status_code=400, detail="至少需要提供一个ID进行删除")
+        # 调用 Milvus 客户端的删除方法
+        res = client.delete(
+            collection_name=req.collection_name,
+            filter=filter_expr
+        )
+        return {"delete_count": res.delete_count if hasattr(res, 'delete_count') else res['delete_count']}
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
