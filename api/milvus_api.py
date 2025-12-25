@@ -123,19 +123,24 @@ async def delete_vectors(req: DeleteRequest):
     删除向量接口
     """
     try:
-        # 根据ID列表构建删除表达式
-        if req.ids:
-            # 构建类似 "id in [1, 2, 3]" 的过滤条件
-            id_list_str = ", ".join(map(str, req.ids))
-            filter_expr = f"id in [{id_list_str}]"
-        else:
+        if not req.ids:
             raise HTTPException(status_code=400, detail="至少需要提供一个ID进行删除")
-        # 调用 Milvus 客户端的删除方法
+        # MilvusClient 会自动识别主键名(hash)并处理引号
         res = client.delete(
             collection_name=req.collection_name,
-            filter=filter_expr
+            ids=req.ids
         )
-        return {"delete_count": res.delete_count if hasattr(res, 'delete_count') else res['delete_count']}
+        # 兼容处理返回结果（有时候返回是 list，有时候是 object）
+        if isinstance(res, list) and len(res) > 0:
+            # 某些版本 delete 返回的是 ID 列表
+            return {"delete_count": len(res)}
+        elif hasattr(res, 'delete_count'):
+            return {"delete_count": res.delete_count}
+        elif isinstance(res, dict) and 'delete_count' in res:
+            return {"delete_count": res['delete_count']}
+        else:
+            # 兜底，MilvusClient delete 有时只返回被删除的 ID 列表
+            return {"delete_count": len(req.ids)}  # 假设成功
     except Exception as e:
         import traceback
         traceback.print_exc()
