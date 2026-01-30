@@ -2,6 +2,16 @@ import argparse
 import os
 import sys
 
+# Milvus Lite does not support Windows (no wheel on PyPI). Fail fast with a clear message.
+if sys.platform == "win32":
+    print("[ERROR] Milvus Lite does not support Windows.")
+    print("        The milvus-lite package is only available for Linux and macOS.")
+    print("        Options for Windows users:")
+    print("        - Use WSL2 (Windows Subsystem for Linux) and run this project inside WSL.")
+    print("        - Use Docker: run Milvus Standalone in a container and connect via URI.")
+    print("        - Use a remote Milvus/Zilliz Cloud instance.")
+    sys.exit(1)
+
 import uvicorn
 
 # 引入我们在上面定义的代理对象

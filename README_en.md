@@ -13,6 +13,12 @@
 ## Dependencies
 The project depends on the milvus-lite project, which is a lightweight version of Milvus specifically designed for local and edge deployments.
 
+## Windows Users
+**Milvus Lite does not support Windows** (no Windows wheels on PyPI). To run this project on Windows, use one of these options:
+- **WSL2**: Install Windows Subsystem for Linux and run this project inside WSL.
+- **Docker**: Run Milvus Standalone in a container and connect via URI.
+- **Remote instance**: Use Milvus Standalone or Zilliz Cloud and connect to a remote server.
+
 ## Use Cases
 - Suitable for scenarios requiring vector search functionality without deploying a full Milvus cluster
 - Local development and testing environments

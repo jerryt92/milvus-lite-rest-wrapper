@@ -15,6 +15,12 @@
 ## 依赖说明
 项目依赖于 milvus-lite 项目，这是一个轻量化的 Milvus 版本，专为本地和边缘部署设计。
 
+## Windows 用户说明
+**Milvus Lite 目前不支持 Windows**（PyPI 上无 Windows 预编译包）。在 Windows 上运行本项目的可选方案：
+- **WSL2**：在 Windows 子系统中安装 Linux，在 WSL 内运行本项目。
+- **Docker**：使用 Milvus Standalone 容器，通过 URI 连接远程实例。
+- **远程实例**：使用 Milvus Standalone / Zilliz Cloud 等远程服务。
+
 ## 用途
 - 适合需要向量搜索功能但不想部署完整 Milvus 集群的场景
 - 本地开发和测试环境
