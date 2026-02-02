@@ -3,4 +3,4 @@
 dir=$(cd "$(dirname "$0")"; pwd)
 # 去到上级目录
 cd $dir/..
-uvicorn main:app --reload
+uvicorn main:app --reload --host 127.0.0.1 --port 29530

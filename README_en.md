@@ -1,7 +1,13 @@
+[简体中文](README.md) | English
+
 # Milvus Lite REST Wrapper Project Description
 
 ## Project Overview
 **milvus-lite-rest-wrapper** is a project that provides a RESTful API wrapper for Milvus Lite, designed to offer a lightweight local vector database solution.
+
+## Platform support
+- **Supported**: macOS, Linux
+- **Not supported**: Windows
 
 ## Project Features
 - **Lightweight**: Based on milvus-lite to achieve local operation
@@ -23,3 +29,7 @@ The project depends on the milvus-lite project, which is a lightweight version o
 - Suitable for single-machine application scenarios
 
 This project provides an excellent solution for developers who need vector database functionality while pursuing lightweight and local deployment options.
+
+## Acknowledgements
+
+The project depends on the [milvus-lite](https://github.com/milvus-io/milvus-lite) project, thanks to the contributions of the Milvus team.

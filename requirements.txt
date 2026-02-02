@@ -1,0 +1,6 @@
+PyYAML~=6.0.3
+uvicorn~=0.40.0
+fastapi~=0.127.0
+pydantic~=2.12.5
+pymilvus~=2.6.5
+milvus_lite~=2.5.1
