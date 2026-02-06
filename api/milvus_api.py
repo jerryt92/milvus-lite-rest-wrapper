@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pymilvus import DataType
+from pymilvus.client.types import FunctionType
+from pymilvus.orm.schema import Function
 
 from models.schemas import CreateCollectionRequest, UpsertRequest, SearchRequest, DropCollectionRequest
 from modules.milvus_lite_client import client
@@ -10,6 +12,7 @@ router = APIRouter()
 TYPE_MAPPING = {
     "VarChar": DataType.VARCHAR,
     "FloatVector": DataType.FLOAT_VECTOR,
+    "SparseFloatVector": DataType.SPARSE_FLOAT_VECTOR,
     "Int64": DataType.INT64,
     "Float": DataType.FLOAT,
     # 根据需要补充其他类型
@@ -30,9 +33,27 @@ async def create_collection(req: CreateCollectionRequest):
     try:
         if client.has_collection(req.collection_name):
             client.drop_collection(req.collection_name)
+        functions = []
+        if req.functions:
+            for func in req.functions:
+                func_type_key = (func.function_type or "").strip().upper()
+                try:
+                    func_type = FunctionType[func_type_key]
+                except KeyError:
+                    raise HTTPException(status_code=400, detail=f"Unsupported Function Type: {func.function_type}")
+                functions.append(Function(
+                    name=func.name,
+                    function_type=func_type,
+                    input_field_names=func.input_field_names,
+                    output_field_names=func.output_field_names,
+                    description=func.description or "",
+                    params=func.params
+                ))
+
         schema = client.create_schema(
             enable_dynamic_field=True,
-            auto_id=False
+            auto_id=False,
+            functions=functions
         )
         for field in req.fields:
             if field.data_type not in TYPE_MAPPING:
@@ -51,8 +72,17 @@ async def create_collection(req: CreateCollectionRequest):
             # 只有当 dimension 不为 None 时才加入参数
             if field.dimension is not None:
                 field_kwargs["dim"] = field.dimension
+            if field.enable_analyzer is not None:
+                field_kwargs["enable_analyzer"] = field.enable_analyzer
+            if field.analyzer_params is not None:
+                analyzer_params = dict(field.analyzer_params)
+                tokenizer = analyzer_params.get("tokenizer")
+                if isinstance(tokenizer, str) and tokenizer.strip().lower() == "icu":
+                    analyzer_params["tokenizer"] = "standard"
+                field_kwargs["analyzer_params"] = analyzer_params
             # 动态调用
             schema.add_field(**field_kwargs)
+        schema.verify()
         index_params = client.prepare_index_params()
         for idx in req.indexes:
             index_params.add_index(
@@ -93,7 +123,8 @@ async def search(req: SearchRequest):
         data=[req.vector],
         limit=req.top_k,
         output_fields=req.output_fields,
-        search_params=req.search_params
+        search_params=req.search_params,
+        anns_field=req.anns_field
     )
     # 简化结果
     results = []
