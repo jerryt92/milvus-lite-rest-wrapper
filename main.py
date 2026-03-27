@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
     if is_debug:
         print("🔧 Debug mode detected")
-        config = uvicorn.Config(app, host="127.0.0.1", port=args.port, reload=False)
+        config = uvicorn.Config(app, host=args.port, port=args.port, reload=True)
         server = uvicorn.Server(config)
         import asyncio
 
